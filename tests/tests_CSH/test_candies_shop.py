@@ -14,6 +14,7 @@ def hello_tester():
     print("Удачных тестов <3")
 
 
+@pytest.mark.skipif('config.getoption("--status") == "Закрыт"')
 @pytest.mark.usefixtures(
     "hello_tester"
 )  # Нужно, когда мы из фикстуры ничего не получаем.
