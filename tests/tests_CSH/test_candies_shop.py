@@ -1,11 +1,18 @@
 import pytest
 
 from main.candies_shop import CandiesShop
+from main.exeptions import NoCandiesInShop
 
 
 @pytest.fixture
 def candies():
     candies = {"Lolipop": 20.50, "RotFront": 14, "Petrograd": 17.03}
+    return candies
+
+
+@pytest.fixture
+def empry_candies():
+    candies = None
     return candies
 
 
@@ -33,3 +40,8 @@ class TestCandiesShop:
         shop = CandiesShop(shop_name, candies)
         shop.sell(name_candy)
         assert shop.cash == result
+
+    def test_empry_candies(self, shop_name, empry_candies):
+        shop = CandiesShop(shop_name, empry_candies)
+        with pytest.raises(NoCandiesInShop):
+            shop.sell("Lolipop")
