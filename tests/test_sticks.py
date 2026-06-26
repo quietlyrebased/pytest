@@ -6,12 +6,20 @@ from contextlib import (
 from main.sticks import LoliPop
 
 
+@pytest.fixture(scope="function")
+def name_test(request):
+    print(f"Старт теста {request.node.name}.")
+    yield
+    print(f"Конец теста {request.node.name}.")
+
+
 class TestCounterStick:
     @pytest.mark.parametrize("count, result", [(1, 2), (2, 3), (-1, 0)])
     def test_counter(self, count, result):
         assert LoliPop().counter(count) == result
 
 
+@pytest.mark.usefixtures("name_test")
 class TestStickDeformation:
     @pytest.mark.parametrize(
         "centimeters, result, expectation",
