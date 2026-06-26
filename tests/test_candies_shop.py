@@ -9,7 +9,7 @@ def candies():
     return candies
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def hello_tester():
     print("Привет! Удачных тестов <3")
 
