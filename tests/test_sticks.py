@@ -6,6 +6,11 @@ from contextlib import (
 from main.sticks import LoliPop
 
 
+@pytest.fixture(scope="session", autouse=True)
+def hello_tester():
+    print("Привет! Удачных тестов <3")
+
+
 @pytest.fixture(scope="function")
 def name_test(request):
     print(f"Старт теста {request.node.name}.")
