@@ -11,7 +11,7 @@ def candies():
 
 @pytest.fixture(scope="session")
 def hello_tester():
-    print("Привет! Удачных тестов <3")
+    print("Удачных тестов <3")
 
 
 @pytest.mark.usefixtures(
@@ -28,7 +28,7 @@ class TestCandiesShop:
             ("Petrograd", 17.03),
         ],
     )
-    def test_sell_candies(self, candies, name_candy, result):
-        shop = CandiesShop("Сладкий мир", candies)
+    def test_sell_candies(self, shop_name, candies, name_candy, result):
+        shop = CandiesShop(shop_name, candies)
         shop.sell(name_candy)
         assert shop.cash == result
