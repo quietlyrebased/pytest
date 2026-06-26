@@ -11,5 +11,5 @@ ___
 #### Обучающие материалы
 
 1. Первая часть.\
-   Конечный коммит: e290f11\
+   Конечный коммит: 825b124\
    Материал: [Pytest Курс](https://www.youtube.com/playlist?list=PLeLN0qH0-mCVdHgdjlnKTl4jKuJgCK-4b "Артём Шумейко")
