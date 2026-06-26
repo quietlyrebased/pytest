@@ -1,0 +1,2 @@
+class NoCandiesInShop(Exception):
+    pass
