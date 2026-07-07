@@ -3,7 +3,7 @@ import datetime
 import pytest
 from unittest.mock import Mock, patch
 
-from mocks.when_to_use import HolidayDiscount
+from mocks.normal_mock.mock_code.holiday_discount import HolidayDiscount
 
 
 @pytest.fixture
