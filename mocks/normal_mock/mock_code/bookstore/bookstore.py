@@ -1,7 +1,9 @@
 from datetime import datetime
 
 from pydantic import BaseModel
-from mocks.normal_mock.mock_code.exeptions import ShopIsClosed
+from mocks.normal_mock.mock_code.bookstore.exeptions import ShopIsClosed
+from mocks.normal_mock.mock_code.bookstore.rating_manager import RatingManager
+from mocks.normal_mock.mock_code.bookstore.timefixer import TimeFixer
 
 
 class Book(BaseModel):
@@ -10,30 +12,31 @@ class Book(BaseModel):
 
 
 class Bookstore:
-    def __init__(self, name: str, capital: float, markup: int = 0, discount: int = 0):
+    def __init__(
+        self,
+        name: str,
+        capital: float,
+        time_fixer: TimeFixer,
+        rating_manager: RatingManager,
+        markup: int = 0,
+        discount: int = 0,
+    ):
         self.name = name
         self.capital = capital
         self.markup = markup
         self.discount = discount
+        self.time_fixer = time_fixer
+        self.rating_manager = rating_manager
 
         self._books: dict[str, Book] = {}
         self._rating: float = 3
         self._regular_customers: set[str] = set()
-        self._opening_date = self.current_datetime()
+        self._opening_date = self.time_fixer.now()
         self._close_date: str | None = None
 
     def _ensure_active(self) -> None:
         if self._rating == 0:
             raise ShopIsClosed("Магазин больше не работает!")
-
-    def _rating_downgrade(self) -> None:
-        self._rating = max(0, self._rating - 0.5)
-
-        if self._rating == 0:
-            self._close_date = self.current_datetime()
-
-    def _rating_increase(self) -> None:
-        self._rating = min(5, self._rating + 0.1)
 
     def add_regular_customer(self, name_customer: str) -> None:
         self._regular_customers.add(name_customer)
@@ -46,7 +49,9 @@ class Bookstore:
         exist = book_name in self._books
 
         if not exist:
-            self._rating_downgrade()
+            self._rating = self.rating_manager.downgrade(self._rating, 0.5)
+            if self._rating == 0:
+                self._close_date = self.time_fixer.now()
 
         return exist
 
@@ -58,7 +63,9 @@ class Bookstore:
         exist = any(book.author == author_name for book in self._books.values())
 
         if not exist:
-            self._rating_downgrade()
+            self._rating = self.rating_manager.downgrade(self._rating, 0.5)
+            if self._rating == 0:
+                self._close_date = self.time_fixer.now()
 
         return exist
 
@@ -134,7 +141,7 @@ class Bookstore:
 
         del self._books[book_name]
 
-        self._rating_increase()
+        self._rating = self.rating_manager.increase(self._rating, 0.1)
 
     @property
     def rating(self) -> float:
@@ -147,7 +154,3 @@ class Bookstore:
     @property
     def close_date(self) -> str | None:
         return self._close_date
-
-    @staticmethod
-    def _current_datetime() -> str:
-        return datetime.now().strftime("%d.%m.%Y %H:%M")
