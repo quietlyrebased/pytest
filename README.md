@@ -10,6 +10,10 @@ ___
 
 #### Обучающие материалы
 
-1. Первая часть.\
+1. Первая часть: Pytest Base\
    Конечный коммит: 825b124\
    Материал: [Pytest Курс](https://www.youtube.com/playlist?list=PLeLN0qH0-mCVdHgdjlnKTl4jKuJgCK-4b "Артём Шумейко")
+
+2. Вторая часть: Mock\
+   Конечный коммит: b40745d\
+   Материал: Чат GPT
